@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   View,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -18,12 +18,15 @@ import {
 } from './styles';
 import LogoImg from '../../assets/Logo.png';
 import Button from '../../components/Button';
+import { useAuth } from '../../context/auth';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(false);
+
   const navigation = useNavigation();
+  const { signIn, loadingAuth } = useAuth();
 
   const handlePassword = useCallback((text: string) => {
     setPassword(text);
@@ -31,8 +34,8 @@ const SignIn: React.FC = () => {
   }, []);
 
   const handleLogin = useCallback(() => {
-    Alert.alert(`Teste`, `Teste`);
-  }, []);
+    signIn(email, password);
+  }, [email, password, signIn]);
 
   const handleSignUp = useCallback(() => {
     navigation.navigate('SignUp');
@@ -74,7 +77,13 @@ const SignIn: React.FC = () => {
               value={password}
               onChangeText={text => handlePassword(text)}
             />
-            <Button onPress={handleLogin}>Entrar</Button>
+            <Button onPress={handleLogin}>
+              {loadingAuth ? (
+                <ActivityIndicator size={20} color="#FFF" />
+              ) : (
+                <Title style={{ fontSize: 22 }}>Entrar</Title>
+              )}
+            </Button>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>

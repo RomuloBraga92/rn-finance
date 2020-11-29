@@ -8,8 +8,10 @@ import {
 import { View, Image, Text, Alert } from 'react-native';
 
 import LogoImg from '../../assets/Logo.png';
+import { useAuth } from '../../context/auth';
 
 const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
+  const { signOut } = useAuth();
   return (
     <DrawerContentScrollView {...props}>
       <View
@@ -42,9 +44,7 @@ const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
         {...props}
         label="Sair do app"
         inactiveBackgroundColor="#c62c36"
-        onPress={() => {
-          Alert.alert('Clicou');
-        }}
+        onPress={() => signOut()}
       />
     </DrawerContentScrollView>
   );

@@ -31,7 +31,7 @@ export const Input = styled.TextInput.attrs({
   color: #fff;
   align-items: center;
   border-width: 2px;
-  border-color: #40db3b;
+  border-color: #00b94a;
   font-size: 20px;
 `;
 

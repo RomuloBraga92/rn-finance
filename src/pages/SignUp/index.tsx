@@ -5,6 +5,7 @@ import {
   Platform,
   View,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import firebase from '../../services/firebaseConnection.js';
@@ -25,6 +26,8 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(false);
+  const [loadingSignUp, setLoadingSingUp] = useState(false);
+
   const navigation = useNavigation();
 
   const handlePassword = useCallback((text: string) => {
@@ -33,6 +36,7 @@ const SignUp: React.FC = () => {
   }, []);
 
   const handleRegister = useCallback(async () => {
+    setLoadingSingUp(true);
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -47,11 +51,13 @@ const SignUp: React.FC = () => {
             name,
           })
           .then(() => {
+            setLoadingSingUp(false);
             navigation.navigate('SignIn');
           });
       })
       .catch(error => {
         Alert.alert(error.code);
+        setLoadingSingUp(false);
       });
   }, [navigation, name, email, password]);
 
@@ -108,7 +114,15 @@ const SignUp: React.FC = () => {
               onSubmitEditing={handleRegister}
             />
 
-            <Button onPress={handleRegister}>Cadastrar</Button>
+            <Button onPress={handleRegister}>
+              {loadingSignUp ? (
+                <ActivityIndicator size={20} color="#FFF" />
+              ) : (
+                <BackButtonText style={{ fontSize: 22 }}>
+                  Cadastrar
+                </BackButtonText>
+              )}
+            </Button>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
