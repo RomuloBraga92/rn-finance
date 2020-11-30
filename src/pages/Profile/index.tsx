@@ -1,11 +1,32 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import { Container, Content, UserNameText } from './styles';
+import Header from '../../components/Header';
+import Button from '../../components/Button';
+import { useAuth } from '../../context/auth';
 
 const Profile: React.FC = () => {
+  const { user, signOut } = useAuth();
+  const navigation = useNavigation();
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Profile</Text>
-    </View>
+    <Container>
+      <Header />
+
+      <Content>
+        <UserNameText>{user && user.name}</UserNameText>
+        <Button onPress={() => navigation.navigate('New')}>
+          Registrar transação
+        </Button>
+        <Button
+          style={{ backgroundColor: '#c62c36' }}
+          onPress={() => signOut()}
+        >
+          Sair
+        </Button>
+      </Content>
+    </Container>
   );
 };
 
